@@ -19,9 +19,9 @@ export class AiService {
     const prompt = `Refactor the following ${language} code for better readability and performance:\n\n${code}`;
     
     const response = await this.openai.chat.completions.create({
-      model: 'gpt-4o-mini',
+      model: 'gpt-4o',
       messages: [{ role: 'system', content: prompt }],
-      max_tokens: 500,
+      // max_tokens: 500,
     });
 
     return response.choices[0]?.message?.content || 'No response';
