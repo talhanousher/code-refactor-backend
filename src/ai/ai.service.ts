@@ -17,7 +17,7 @@ export class AiService {
 
   async refactorCode(code: string, language: string): Promise<string> {
     const prompt = `Refactor the following ${language} code for better readability and performance:\n\n${code}`;
-    
+
     const response = await this.openai.chat.completions.create({
       model: 'gpt-4o',
       messages: [{ role: 'system', content: prompt }],
@@ -52,6 +52,37 @@ export class AiService {
       console.error('Error calling OpenRouter API:', error.response?.data || error.message);
       return 'Error processing your request.';
     }
+  }
+
+  async convertCode(
+    code: string,
+    sourceLanguage: string,
+    targetLanguage: string
+  ): Promise<string> {
+    const prompt = `Convert the following ${sourceLanguage} code to ${targetLanguage} while maintaining the same functionality and best practices:\n\n${code}`;
+
+    const response = await this.openai.chat.completions.create({
+      model: 'gpt-4o',
+      messages: [{ role: 'system', content: prompt }],
+    });
+
+    return response.choices[0]?.message?.content || 'No response';
+  }
+
+  async analyzeCodeComplexity(code: string, language: string): Promise<string> {
+    const prompt = `Analyze the following ${language} code and provide:
+    - A complexity score (low, medium, high)
+    - Key factors contributing to complexity
+    - Suggestions for improving readability and performance
+    
+    Code:\n\n${code}`;
+  
+    const response = await this.openai.chat.completions.create({
+      model: 'gpt-4o',
+      messages: [{ role: 'system', content: prompt }],
+    });
+  
+    return response.choices[0]?.message?.content || 'No response';
   }
 
 }
